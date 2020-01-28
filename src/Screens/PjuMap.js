@@ -53,8 +53,8 @@ class Screen extends React.Component {
 								key={i}
 								pinColor={pju.idPelanggan ? "blue" : "red"}
 								coordinate={{
-									longitude: pju.longitude,
-									latitude: pju.latitude
+									longitude: +pju.longitude,
+									latitude: +pju.latitude
 								}}
 								onPress={ () => {
 									this.props.navigation.navigate("PjuDetail", { data: pju }) 
