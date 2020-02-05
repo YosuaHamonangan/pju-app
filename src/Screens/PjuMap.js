@@ -6,16 +6,19 @@ import {
 
 import MapView, { PROVIDER_GOOGLE } from "react-native-maps";
 import Geolocation from "@react-native-community/geolocation";
+import LoadingOverlay from "../Components/LoadingOverlay";
 import services from "../services";
 
 class Screen extends React.Component {
-	static navigationOptions = {
-		headerTitle: "Peta PJU",
-	};
+	static navigationOptions = ({ navigation }) => ({
+		headerTitle: navigation.getParam("title") || "Peta PJU",
+    });
 
-	state = {}
+	state = {};
 
-	componentDidMount(){
+	componentDidMount() {
+		this.setState({ loading: true });
+
 		Geolocation.getCurrentPosition( position => {
 			var region = {
 				longitude: position.coords.longitude,
@@ -26,12 +29,13 @@ class Screen extends React.Component {
 			this.setState({ region });
 		});
 
-		services.getPjuList()
+		services.getPjuList(this.props.navigation.getParam("filter"))
 			.then( list => {
-				this.setState({ pjuList: list });
+				this.setState({ pjuList: list, loading: false });
 			})
 			.catch( err => {
 				services.errorHandler(err);
+				this.setState({ loading: false });
 			});
 	}
 
@@ -39,6 +43,7 @@ class Screen extends React.Component {
 		var { region, pjuList } = this.state;
 		return (
 			<View style={styles.container}>
+				{ this.state.loading &&  <LoadingOverlay/> }
 				<MapView
 					ref={ map => this.map = map }
 					initialRegion={region}
@@ -57,7 +62,15 @@ class Screen extends React.Component {
 									latitude: +pju.latitude
 								}}
 								onPress={ () => {
-									this.props.navigation.navigate("PjuDetail", { data: pju }) 
+									var onSelect = this.props.navigation.getParam("onSelect");
+
+									if(onSelect) {
+										onSelect(pju.idPelanggan);
+										this.props.navigation.goBack();
+									}
+									else {
+										this.props.navigation.navigate("PjuDetail", { data: pju })
+									}
 								}}
 							/>
 						))

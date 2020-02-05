@@ -21,13 +21,13 @@ class Screen extends React.Component {
 	};
 
 	updateInfo = region => {
-		services.getCoordinateInfo(region)
-			.then( ({ results }) => {
-				this.setState({ info: results[0] });
-			})
-			.catch( err => {
-				services.errorHandler(err);
-			});
+		// services.getCoordinateInfo(region)
+		// 	.then( ({ results }) => {
+		// 		this.setState({ info: results[0] });
+		// 	})
+		// 	.catch( err => {
+		// 		services.errorHandler(err);
+		// 	});
 	};
 
 	componentDidMount(){
@@ -90,7 +90,8 @@ const styles = StyleSheet.create({
 	},
 	footer: {
 		flex: 0,
-		height: 250, 
+		height: 110, 
+		// height: 250, 
 		backgroundColor: "white",
 		alignItems: "center"
 	},
@@ -109,10 +110,10 @@ const styles = StyleSheet.create({
 		fontWeight: "bold"
 	},
 	detail: {
-		width: "100%",
-		height: 150, 
-		fontSize: 20,
-		padding: 10
+		// width: "100%",
+		// height: 150, 
+		// fontSize: 20,
+		// padding: 10
 	},
 	addButtonContainer: {
 		width: "100%",

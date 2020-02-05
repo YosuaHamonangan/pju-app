@@ -2,9 +2,9 @@ import axios from "axios";
 import navigator from "./Utils/navigator";
 import showError from "./Utils/showError";
 import {BASE_URL} from "../global";
-import Geocoder from "react-native-geocoding";
+// import Geocoder from "react-native-geocoding";
 
-Geocoder.init("AIzaSyBG3l9IKNYm3OoJ-m8HswoRK0LYhfardbY");
+// Geocoder.init("AIzaSyBG3l9IKNYm3OoJ-m8HswoRK0LYhfardbY");
 var instance = axios.create({
 	baseURL: BASE_URL
 });
@@ -19,14 +19,18 @@ var services = {
 	createPju: async function(data) {
 		return await instance.post("/pju/create", data);
 	},
-	getPjuList: async function() {
-		var res = await instance.get("/pju/list");
+	getPjuList: async function(filter) {
+		if(filter) {
+			var filterQuery = filter.map( ([key, val]) => `${key}=${val}`).join("&");
+		}
+		var query = filterQuery ? `?${filterQuery}` : "" ;
+		var res = await instance.get(`/pju/list${query}`);
 		return res.data;
 	},
-	getCoordinateInfo: async function(coordinate) {
-		var data = await Geocoder.from(coordinate);
-		return data;
-	},
+	// getCoordinateInfo: async function(coordinate) {
+	// 	var data = await Geocoder.from(coordinate);
+	// 	return data;
+	// },
 	errorHandler: function(err) {
 		if(!err.response) {
 			showError("Gagal terhubung dengan server, mohon cek koneksi anda");

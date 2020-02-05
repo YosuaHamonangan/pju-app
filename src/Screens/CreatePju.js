@@ -10,7 +10,7 @@ class Screen extends React.Component {
 	};
 
 	state = {
-		legal: false,
+		legal: true,
 	};
 
 	validate() {
@@ -70,6 +70,14 @@ class Screen extends React.Component {
 			});
 	};
 
+	selectIdPelanggan = () => {
+		this.props.navigation.navigate("PjuMap", {
+			title: "Pilih titik PJU",
+			filter: [["legal", true]],
+			onSelect: idPelanggan => this.setState({ idPelanggan })
+		});
+	};
+
 	selectLocation = () => {
 		this.props.navigation.navigate("SelectLocation", {
 			onSubmit: ({ longitude, latitude }) => this.setState({ longitude, latitude })
@@ -86,7 +94,6 @@ class Screen extends React.Component {
 		return (
 			<ScrollView style={styles.container}>
 				<Text h2 style={styles.title}>Data PJU Baru</Text>
-
 				<Text style={styles.label}>Foto PJU</Text>
 				<View style={styles.previewContainer}>
 					<View style={styles.previewFrame}>
@@ -115,13 +122,21 @@ class Screen extends React.Component {
 				</Picker>
 
 				{ this.state.legal &&
-					<Input
-						labelStyle={[styles.label, styles.removePaddingLabel]}
-						inputContainerStyle={[styles.inputContainer, styles.removePaddingInput]}
-						label="ID Pelanggan"
-						keyboardType="number-pad"
-						onChangeText={ val => this.setState({ idPelanggan: val}) }
-					/>
+					<React.Fragment>
+						<Text style={styles.label}>ID Pelanggan</Text>
+						<Button
+							buttonStyle={styles.button}
+							title="Dari PJU Sekitar"
+							onPress={this.selectIdPelanggan}
+						/>
+						<Input
+							labelStyle={[styles.label, styles.removePaddingLabel]}
+							inputContainerStyle={[styles.inputContainer, styles.removePaddingInput]}
+							keyboardType="number-pad"
+							value={this.state.idPelanggan}
+							onChangeText={ val => this.setState({ idPelanggan: val}) }
+						/>
+					</React.Fragment>
 				}
 
 				<Input
