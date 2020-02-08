@@ -4,6 +4,12 @@ import { Picker } from "react-native";
 export default class Component extends React.Component {
 	state = {}
 
+	_onValueChange =  value => {
+		var { onValueChange } = this.props;
+		this.setState({ value });
+		if(onValueChange) onValueChange(value);
+	}
+
 	_getOptions() {
 		if(!this.props.getData) return;
 
@@ -12,6 +18,8 @@ export default class Component extends React.Component {
 	}
 
 	_updateOptions(options) {
+		if(!this._isMounted) return;
+		
 		this.setState(
 			{options, value: ""},
 			this.props.onValueChange ? () => this.props.onValueChange("") : null
@@ -31,20 +39,21 @@ export default class Component extends React.Component {
 	}
 
 	componentDidMount() {
+		this._isMounted = true;
 		this._getOptions();
+	}
+
+	componentWillUnmount() {
+		this._isMounted = false;
 	}
 
 	render() {
 		var { options, value } = this.state;
 		var isValid = Array.isArray(options) && options.length > 0;
 
-		var { onValueChange, required } = this.props;
 		return (
 			<Picker enabled={isValid} selectedValue={ isValid && value ? value : ""}
-				onValueChange={ value => {
-					this.setState({ value });
-					if(onValueChange) onValueChange(value);
-				}}
+				onValueChange={this._onValueChange}
 			>
 				<Picker.Item disabled label=" -- Pilih salah satu -- " value="" />
 				{ isValid &&

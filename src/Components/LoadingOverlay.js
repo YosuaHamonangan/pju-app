@@ -6,7 +6,7 @@ class Component extends React.Component {
 
 	render() {
 		return (
-			<Overlay fullScreen overlayBackgroundColor="#ffffff88" overlayStyle={styles.container}>
+			<Overlay isVisible fullScreen overlayBackgroundColor="#ffffff88" overlayStyle={styles.container}>
 				<ActivityIndicator size={80} color="#47525e" />
 			</Overlay>
 		)
