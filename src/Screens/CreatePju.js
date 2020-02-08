@@ -1,6 +1,7 @@
 import React from "react";
 import { StyleSheet, View, ScrollView, Picker, Image } from "react-native";
 import { Text, Input, Button } from "react-native-elements";
+import AsyncSelect from "../Components/AsyncSelect";
 import showError from "../Utils/showError";
 import services from "../services";
 
@@ -180,33 +181,50 @@ class Screen extends React.Component {
 					/>
 				</View>
 
+				<Text style={styles.label}>Provinsi</Text>
+				<AsyncSelect
+					getData={services.getProvinsi}
+					onValueChange={ value => 
+						this.setState({
+							provinsi: value,
+							getKota: () => services.getKota(value)
+						}) 
+					}
+				/>
+
+				<Text style={styles.label}>Kota/Kabupaten</Text>
+				<AsyncSelect
+					getData={this.state.getKota}
+					onValueChange={ 
+						value => this.setState({
+							kota: value,
+							getKecamatan: () => services.getKecamatan(value)
+						}) 
+					}
+				/>
+
+				<Text style={styles.label}>Kecamatan</Text>
+				<AsyncSelect
+					getData={this.state.getKecamatan}
+					onValueChange={ 
+						value => this.setState({
+							kecamatan: value,
+							getKelurahan: () => services.getKelurahan(value)
+						}) 
+					}
+				/>
+
+				<Text style={styles.label}>Kelurahan/Desa</Text>
+				<AsyncSelect
+					getData={this.state.getKelurahan}
+					onValueChange={ value => this.setState({ kelurahan: value }) }
+				/>
 
 				<Input
 					labelStyle={[styles.label, styles.removePaddingLabel]}
 					inputContainerStyle={[styles.inputContainer, styles.removePaddingInput]}
 					label="Jalan"
 					onChangeText={ val => this.setState({ jalan: val}) }
-				/>
-
-				<Input
-					labelStyle={[styles.label, styles.removePaddingLabel]}
-					inputContainerStyle={[styles.inputContainer, styles.removePaddingInput]}
-					label="Kota/Kabupaten"
-					onChangeText={ val => this.setState({ kota: val}) }
-				/>
-
-				<Input
-					labelStyle={[styles.label, styles.removePaddingLabel]}
-					inputContainerStyle={[styles.inputContainer, styles.removePaddingInput]}
-					label="Kecamatan"
-					onChangeText={ val => this.setState({ kecamatan: val}) }
-				/>
-
-				<Input
-					labelStyle={[styles.label, styles.removePaddingLabel]}
-					inputContainerStyle={[styles.inputContainer, styles.removePaddingInput]}
-					label="Kelurahan/Desa"
-					onChangeText={ val => this.setState({ kelurahan: val}) }
 				/>
 
 				<Input
