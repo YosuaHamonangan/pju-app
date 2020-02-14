@@ -78,15 +78,53 @@ class Screen extends React.Component {
 			await this.getPjuList(region).catch(console.error);
 			this.setState({ loading: false });
 		});
+	}
 
-		// services.getPjuList(this.props.navigation.getParam("filter"))
-		// 	.then( list => {
-		// 		this.setState({ pjuList: list, loading: false });
-		// 	})
-		// 	.catch( err => {
-		// 		services.errorHandler(err);
-		// 		this.setState({ loading: false });
-		// 	});
+	getMarkers() {
+		var { list } = this.state;
+		var idPelGroups = {};
+
+		var markers = list.map( (pju, i) => {
+			var { idPelanggan } = pju;
+			var longitude = +pju.longitude;
+			var latitude = +pju.latitude;
+
+			if(idPelanggan) {
+				idPelGroups[idPelanggan] = idPelGroups[idPelanggan]  || [];
+				idPelGroups[idPelanggan].push({longitude, latitude});
+			}
+
+			return (
+				<MapView.Marker
+					key={i}
+					pinColor={idPelanggan ? "blue" : "red"}
+					coordinate={{ longitude, latitude }}
+					onPress={ () => {
+						var onSelect = this.props.navigation.getParam("onSelect");
+
+						if(onSelect) {
+							onSelect(idPelanggan);
+							this.props.navigation.goBack();
+						}
+						else {
+							this.props.navigation.navigate("PjuDetail", { data: pju })
+						}
+					}}
+				/>
+			);
+		});
+
+		for(var idPelanggan in idPelGroups) {
+			markers.push(
+				<MapView.Polyline
+					coordinates={idPelGroups[idPelanggan]}
+					strokeColor="blue"
+					strokeWidth={6}
+				/>
+			);
+		}
+
+		return markers;
 	}
 
 	render() {
@@ -102,29 +140,7 @@ class Screen extends React.Component {
 					showsUserLocation={true}
 					onRegionChange={this.onRegionChange}
 				>
-					{ list && 
-						list.map( (pju, i) => (
-							<MapView.Marker
-								key={i}
-								pinColor={pju.idPelanggan ? "blue" : "red"}
-								coordinate={{
-									longitude: +pju.longitude,
-									latitude: +pju.latitude
-								}}
-								onPress={ () => {
-									var onSelect = this.props.navigation.getParam("onSelect");
-
-									if(onSelect) {
-										onSelect(pju.idPelanggan);
-										this.props.navigation.goBack();
-									}
-									else {
-										this.props.navigation.navigate("PjuDetail", { data: pju })
-									}
-								}}
-							/>
-						))
-					}
+					{ list && this.getMarkers() }
 				</MapView>
 			</View>
 		);
