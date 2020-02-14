@@ -8,7 +8,7 @@ import services from "../services";
 
 class Screen extends React.Component {
 	static navigationOptions = {
-		headerShown: true
+		headerShown: false
 	};
 
 	render() {
