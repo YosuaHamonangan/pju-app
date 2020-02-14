@@ -4,16 +4,18 @@ import {
 	TouchableOpacity 
 } from "react-native";
 import { Text } from "react-native-elements";
+import services from "../services";
 
 class Screen extends React.Component {
 	static navigationOptions = {
-		headerShown: false
+		headerShown: true
 	};
 
 	render() {
 		return (
 			<View style={styles.container}>
 				<Text h2 style={styles.title}>Manajemen PJU</Text>
+
 				<View style={styles.buttonContainer}>
 					<TouchableOpacity
 						style={styles.button}
@@ -28,6 +30,18 @@ class Screen extends React.Component {
 						<Text style={styles.buttonText}>Tambah Titik PJU Baru</Text>
 					</TouchableOpacity>
 				</View>
+
+				<TouchableOpacity
+					style={styles.logout}
+					onPress={ () => {
+						services.logout()
+							.then( () => {
+								this.props.navigation.navigate("PjuMap");
+							})
+					}}
+				>
+					<Text>Logout</Text>
+				</TouchableOpacity>
 			</View>
 		);
 	}
@@ -41,6 +55,10 @@ const styles = StyleSheet.create({
 		textAlign: "center",
 		marginTop: 40,
 		marginBottom: 50,
+	},
+	logout: {
+		alignItems: "center",
+		marginTop: 50,
 	},
 	buttonContainer: { 
 		flexDirection: "row",

@@ -16,6 +16,9 @@ var services = {
 	login: async function(username, password) {
 		return await instance.post("/user/login", {username, password});
 	},
+	logout: async function() {
+		return await instance.post("/user/logout");
+	},
 	createPju: async function(data) {
 		return await instance.post("/pju/create", data);
 	},

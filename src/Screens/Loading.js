@@ -4,12 +4,22 @@ import {
 	View,
 	Text
 } from 'react-native';
+import services from "../services";
 
 class Screen extends React.Component {
 	componentDidMount(){
-		setTimeout( () => {
-			this.props.navigation.navigate('Auth');
-		}, 100);
+		services.testSecret()
+			.then( () => {
+				this.props.navigation.navigate('App');
+			})
+			.catch( err => {
+				if(err.response.status === 401) {
+					this.props.navigation.navigate("Auth");
+				}
+				else {
+					console.error(err);
+				}
+			})
 	}
 
 	render() {
