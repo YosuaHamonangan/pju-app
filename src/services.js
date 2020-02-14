@@ -6,7 +6,8 @@ import {BASE_URL} from "../global";
 
 // Geocoder.init("AIzaSyBG3l9IKNYm3OoJ-m8HswoRK0LYhfardbY");
 var instance = axios.create({
-	baseURL: BASE_URL
+	baseURL: BASE_URL,
+	timeout: 1000,
 });
 
 var services = {
@@ -23,11 +24,9 @@ var services = {
 		return await instance.post("/pju/create", data);
 	},
 	getPjuList: async function(filter) {
-		if(filter) {
-			var filterQuery = filter.map( ([key, val]) => `${key}=${val}`).join("&");
-		}
-		var query = filterQuery ? `?${filterQuery}` : "" ;
-		var res = await instance.get(`/pju/list${query}`);
+		var res = await instance.get("/pju/list", { 
+			params: { ...filter }
+		});
 		return res.data;
 	},
 	getProvinsi: async function() {

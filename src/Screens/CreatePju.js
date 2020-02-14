@@ -74,7 +74,7 @@ class Screen extends React.Component {
 	selectIdPelanggan = () => {
 		this.props.navigation.navigate("PjuMap", {
 			title: "Pilih titik PJU",
-			filter: [["legal", true]],
+			filter: { legal:  true },
 			onSelect: idPelanggan => this.setState({ idPelanggan })
 		});
 	};

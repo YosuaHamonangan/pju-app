@@ -4,22 +4,32 @@ import {
 	View,
 	Text
 } from 'react-native';
+import showError from "../Utils/showError";
 import services from "../services";
 
 class Screen extends React.Component {
-	componentDidMount(){
+
+	checkLogin() {
 		services.testSecret()
 			.then( () => {
 				this.props.navigation.navigate('App');
 			})
 			.catch( err => {
-				if(err.response.status === 401) {
+				if(!err.response) {
+					showError("Gagal terhubung dengan server, mohon cek koneksi anda");
+					this.checkLogin();
+				}
+				else if(err.response.status === 401) {
 					this.props.navigation.navigate("Auth");
 				}
 				else {
 					console.error(err);
 				}
 			})
+	}
+
+	componentDidMount(){
+		this.checkLogin();
 	}
 
 	render() {
