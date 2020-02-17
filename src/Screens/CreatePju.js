@@ -168,7 +168,7 @@ class Screen extends React.Component {
 						containerStyle={{flex: 1}}
 						placeholder="Longitude"
 						value={this.state.longitude ? this.state.longitude.toString() : ""}
-						disabled
+						disabled editable
 					/>
 					<Input
 						labelStyle={[styles.label, styles.removePaddingLabel]}
@@ -177,7 +177,7 @@ class Screen extends React.Component {
 						placeholder="Latitude"
 						keyboardType="number-pad"
 						value={this.state.latitude ? this.state.latitude.toString() : ""}
-						disabled
+						disabled editable
 					/>
 				</View>
 
@@ -186,7 +186,7 @@ class Screen extends React.Component {
 					getData={services.getProvinsi}
 					onValueChange={ value => 
 						this.setState({
-							provinsi: value,
+							idProvinsi: value,
 							getKota: () => services.getKota(value)
 						}) 
 					}
@@ -197,7 +197,7 @@ class Screen extends React.Component {
 					getData={this.state.getKota}
 					onValueChange={ 
 						value => this.setState({
-							kota: value,
+							idKota: value,
 							getKecamatan: () => services.getKecamatan(value)
 						}) 
 					}
@@ -208,7 +208,7 @@ class Screen extends React.Component {
 					getData={this.state.getKecamatan}
 					onValueChange={ 
 						value => this.setState({
-							kecamatan: value,
+							idKecamatan: value,
 							getKelurahan: () => services.getKelurahan(value)
 						}) 
 					}
@@ -217,7 +217,7 @@ class Screen extends React.Component {
 				<Text style={styles.label}>Kelurahan/Desa</Text>
 				<AsyncSelect
 					getData={this.state.getKelurahan}
-					onValueChange={ value => this.setState({ kelurahan: value }) }
+					onValueChange={ value => this.setState({ idKelurahan: value }) }
 				/>
 
 				<Input
@@ -225,6 +225,13 @@ class Screen extends React.Component {
 					inputContainerStyle={[styles.inputContainer, styles.removePaddingInput]}
 					label="Jalan"
 					onChangeText={ val => this.setState({ jalan: val}) }
+				/>
+				
+				<Input
+					labelStyle={[styles.label, styles.removePaddingLabel]}
+					inputContainerStyle={[styles.inputContainer, styles.removePaddingInput]}
+					label="RT"
+					onChangeText={ val => this.setState({ rt: val}) }
 				/>
 
 				<Input
@@ -234,12 +241,6 @@ class Screen extends React.Component {
 					onChangeText={ val => this.setState({ rw: val}) }
 				/>
 
-				<Input
-					labelStyle={[styles.label, styles.removePaddingLabel]}
-					inputContainerStyle={[styles.inputContainer, styles.removePaddingInput]}
-					label="RT"
-					onChangeText={ val => this.setState({ rt: val}) }
-				/>
 				<Button
 					containerStyle={styles.submitButton}
 					buttonStyle={styles.button}

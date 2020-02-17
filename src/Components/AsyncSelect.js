@@ -10,19 +10,23 @@ export default class Component extends React.Component {
 		if(onValueChange) onValueChange(value);
 	}
 
-	_getOptions() {
+	_getOptions(value) {
 		if(!this.props.getData) return;
 
 		this.props.getData()
-			.then( data => this._updateOptions(data) );
+			.then( data => this._updateOptions(data, value) );
 	}
 
-	_updateOptions(options) {
+	_updateOptions(options, value) {
 		if(!this._isMounted) return;
 		
+		var shouldCallback = !this._firstUpdate;
+		this._firstUpdate = false;
+
+		value = value || "";
 		this.setState(
-			{options, value: ""},
-			this.props.onValueChange ? () => this.props.onValueChange("") : null
+			{options, value},
+			shouldCallback && this.props.onValueChange ? () => this.props.onValueChange(value) : null
 		);
 	}
 
@@ -40,7 +44,8 @@ export default class Component extends React.Component {
 
 	componentDidMount() {
 		this._isMounted = true;
-		this._getOptions();
+		this._firstUpdate = true;
+		this._getOptions(this.props.defaultValue);
 	}
 
 	componentWillUnmount() {
@@ -51,6 +56,8 @@ export default class Component extends React.Component {
 		var { options, value } = this.state;
 		var isValid = Array.isArray(options) && options.length > 0;
 
+		var { placeholder } = this.props;
+		placeholder = placeholder || " -- Pilih salah satu -- ";
 		return (
 			<Picker enabled={isValid} selectedValue={ isValid && value ? value : ""}
 				onValueChange={this._onValueChange}

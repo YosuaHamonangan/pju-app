@@ -23,6 +23,16 @@ var services = {
 	createPju: async function(data) {
 		return await instance.post("/pju/create", data);
 	},
+	editPju: async function(data) {
+		var res = await instance.post("/pju/edit", data);
+		return res.data;
+	},
+	getPju: async function(kode) {
+		var res = await instance.get("/pju/get", { 
+			params: { kode }
+		});
+		return res.data;
+	},
 	getPjuList: async function(filter) {
 		var res = await instance.get("/pju/list", { 
 			params: { ...filter }
