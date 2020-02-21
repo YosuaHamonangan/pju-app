@@ -28,7 +28,7 @@ class Screen extends React.Component {
 		}
 		
 		legal = legal !== undefined ? legal : !!currentData.idPelanggan;
-		if(!legal) delete data.idPelanggan;
+		if(!legal) data.idPelanggan = "";
 		
 		// Check if there are data changes
 		if(Object.entries(data).length === 0) return;
@@ -249,7 +249,7 @@ class Screen extends React.Component {
 				<Button
 					containerStyle={styles.submitButton}
 					buttonStyle={styles.button}
-					title="Ubah Daya"
+					title="Ubah Data"
 					loading={this.state.loading}
 					onPress={this.submit}
 				/>
