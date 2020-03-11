@@ -1,6 +1,7 @@
 import React from "react";
 import { StyleSheet, View, ScrollView, Picker, Image } from "react-native";
 import { Text, Input, Button } from "react-native-elements";
+import openMap from "react-native-open-maps";
 import AsyncSelect from "../Components/AsyncSelect";
 import showError from "../Utils/showError";
 import { BASE_URL } from "../../global";
@@ -71,6 +72,11 @@ class Screen extends React.Component {
 		});
 	};
 
+	openMap = () => {
+		var { latitude, longitude } = this.state.currentData;
+		openMap({ end: `${latitude}, ${longitude}` });
+	}
+
 	componentDidMount() {
 		var { kode } = this.props.navigation.getParam("data");
 		services.getPju(kode)
@@ -103,6 +109,12 @@ class Screen extends React.Component {
 						onPress={this.takePicture}
 					/>
 				</View>
+
+				<Button
+					buttonStyle={styles.button}
+					title="Buka di map"
+					onPress={this.openMap}
+				/>
 
 				<Text style={styles.label}>Status PJU</Text>
 				<Picker
