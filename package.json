@@ -3,11 +3,10 @@
   "version": "0.0.1",
   "private": true,
   "scripts": {
+    "build-android": "cd android && gradlew assembleRelease",
     "android": "react-native run-android --appIdSuffix \"debug\"",
     "ios": "react-native run-ios",
-    "start": "react-native start",
-    "test": "jest",
-    "lint": "eslint ."
+    "start": "react-native start"
   },
   "dependencies": {
     "@react-native-community/geolocation": "^2.0.2",
